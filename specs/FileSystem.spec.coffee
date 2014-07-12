@@ -103,9 +103,15 @@ describe 'FileSystem', ->
       'a.txt': 'text'
       'b.bin': new Buffer('binary')
       'folder':
-        'c.config': 'config'        
-
+        'c.config': 'config' 
+        
     describe 'open folder', ->
+      it 'should accept realive path', ->      
+        fs = createFS '/x/y/z', fsData()
+
+        folder = fs.openFolder('folder')
+        folder.should.has.keys 'c.config'
+
       it 'should open existing folder', ->
         fs = createFS fsData()
 
@@ -160,3 +166,22 @@ describe 'FileSystem', ->
       file.path.should.equal '/a.txt'
       file.isBuffer().should.be.true
       file.contents.toString('utf8').should.equal 'text'
+
+    it 'should delete file', ->
+      fs = createFS fsData()
+      fs.deleteFile '/a.txt'
+      expect(fs.fs['/a.txt']).to.not.exist
+
+    it 'should check file existence', ->
+      fs = createFS fsData()
+
+      fs.exists('/a.txt').should.be.true
+      fs.exists('/not_exists').should.be.false
+
+
+    it 'should create sub file system', ->
+      fs = createFS fsData()
+      subFs = fs.subFileSystem('folder')
+      subFs.writeFile('new.txt','new')
+      fs.readFile('folder/new.txt').should.equal 'new'
+

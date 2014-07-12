@@ -25,10 +25,11 @@ class FileSystem
     else
       @fs['..'] = arguments[0]
 
-  fullpath: ->
+  fullpath: ->      
     pathUtil.join(@path(), @name())  
 
-  _localPath: (path) ->
+  _localPath: (path) ->    
+    path = pathUtil.resolve(@fullpath(), path)
     localPath = pathUtil.relative @fullpath(), path
     localPath.split pathUtil.sep
 
@@ -66,6 +67,25 @@ class FileSystem
 
     folder[filename]
 
+  deleteFile: (path) ->
+    path = @_localPath(path)
+    
+    filename = path.pop()
+
+    folder = @openFolder(path)
+
+    delete folder[filename]
+
+  exists: (path) ->
+    try
+      @openFolder path
+      true
+    catch ex
+      return false if Type.is(ex, PathNotExistsException)
+
+      throw ex
+    
+
   readFileAsBuffer: (path) ->
     content = @readFile(path)
     content = new Buffer(content) unless Buffer.isBuffer(content)
@@ -90,8 +110,9 @@ class FileSystem
     type[..4] == 'file.'
 
   subFileSystem: (path, create) ->
+    path = pathUtil.resolve(@fullpath(), path)
     folder = @openFolder(path, create)
-    new FileSystem(folder)
+    FileSystem.create path, folder
 
   openFile: (path) ->
     new File 
