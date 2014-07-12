@@ -1,0 +1,4 @@
+lib_src
+node_modules
+specs
+gulpfile.coffee
