@@ -13,7 +13,7 @@ dumpStream = (stream, callback) ->
   stream.resume()
 
 describe 'ReadableFSStream', ->
-  {createFS} = require('../index')  
+  createFS = require('../index')  
   {ReadableFSStream, File} = createFS
 
   describe 'exports', ->

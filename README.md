@@ -19,7 +19,7 @@ require('./spec_helper')
 spy = require('through2-spy')
 
 describe 'smoke test', ->
-  {createFS} = require('../index')
+  createFS = require('../index')
   coffee = require('gulp-coffee')
   
   it 'should replace gulp', (done) ->  

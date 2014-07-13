@@ -1,7 +1,7 @@
 require('./spec_helper')
 
 describe 'createFS', ->
-  {createFS} = require('../index') 
+  createFS = require('../index') 
   
   {FileSystem} = createFS
   

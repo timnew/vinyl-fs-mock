@@ -1,7 +1,7 @@
 require('./spec_helper')
 
 describe 'FileSystemIterator', ->
-  {createFS} = require('../index')  
+  createFS = require('../index')  
   {FileSystemIterator} = createFS
 
   it 'should export class', ->

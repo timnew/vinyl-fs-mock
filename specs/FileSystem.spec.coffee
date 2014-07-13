@@ -1,7 +1,7 @@
 require('./spec_helper')
 
 describe 'FileSystem', ->
-  {createFS} = require('../index') 
+  createFS = require('../index') 
   
   {FileSystem, File, PathNotExistsException} = createFS
   

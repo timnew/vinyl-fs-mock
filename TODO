@@ -1,5 +1,7 @@
  ☐ Check Path out of scope
  ✔ createFolder @done (14-07-13 18:33)
+ ✔ remove extra level of folder hierarchy @done (14-07-13 21:13)
+ ☐ remove open vinyl file from file system
  ☐ FS Shift
  ☐ API renaming
  ☐ Dump Stream

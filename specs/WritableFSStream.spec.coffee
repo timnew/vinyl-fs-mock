@@ -1,7 +1,7 @@
 require('./spec_helper')
 
 describe 'WritableFSStream', ->
-  {createFS} = require('../index')  
+  createFS = require('../index')  
   {WritableFSStream, File} = createFS
 
   describe 'exports', ->
