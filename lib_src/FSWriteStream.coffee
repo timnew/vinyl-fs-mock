@@ -6,7 +6,7 @@ class FSWriteStream extends Writable
   constructor: (@fileSystem, basepath) ->
     super
       objectMode: true
-  
+
     @basepath = if basepath?
                   pathUtil.resolve(@fileSystem.fullpath(), basepath)
                 else
@@ -32,6 +32,15 @@ class FSWriteStream extends Writable
     return '' if file.isNull()
     throw new Error('Not Supported')
 
+  onFinished: (done, callback) ->
+    @on 'finish', =>
+      try        
+        callback @fileSystem.openFolder(@basepath)
+        done()
+      catch ex
+        done(ex)
+  
+  
 module.exports = FSWriteStream
 
 FileSystem.prototype.createWriteStream = (path) ->

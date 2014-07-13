@@ -39,24 +39,19 @@ describe 'smoke test', ->
               """
         
     fs.createReadStream 'src/coffee'
-      # .pipe spy.obj (file) ->
-      #   console.log [file.base, file.path]
       .pipe coffee
         bare: true
-      # .pipe spy.obj (file) ->
-      #   console.log [file.base, file.path]
       .pipe fs.createWriteStream('dest/js', true)
-      .on 'finish', ->
-        try
-          # console.log fs.directory
-          # console.log fs.readFile('dest/js/sample.js')
-          # console.log fs.readFile('dest/js/another.js')        
-          fs.readFile('dest/js/sample.js').should.not.be.null
-          fs.readFile('dest/js/another.js').should.not.be.null
-          done()
-        catch ex
-          done ex
+      .onFinished done, (folder) ->
+        folder.should.equal fs.openFolder('dest/js')                
+        folder['sample.js'].should.not.be.null
+        folder['another.js'].should.not.be.null
+      
 ```
+
+## API
+
+> TODO
  
 ## License
 MIT

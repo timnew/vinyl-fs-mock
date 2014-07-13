@@ -99,7 +99,28 @@ describe 'FSWriteStream', ->
 
         stream = fs.createWriteStream()
         
-        stream.on 'finish', ->
+        stream.on 'finish', ->                
+          done()
+        
+        stream.end()
+
+    describe 'onFinished', ->
+      it 'should send dest folder to callback and invoke done automatically', (done) ->
+        fs = createFS fsData()
+
+        stream = fs.createWriteStream('/project/dest')
+        
+        stream.onFinished done, (folder) ->
+          expect(folder).to.equal fs.openFolder('/project/dest')
+        
+        stream.end()
+
+      it 'should be okay if not done callback is provided', (done) ->
+        fs = createFS fsData()
+
+        stream = fs.createWriteStream('/project/dest')
+        
+        stream.onFinished (folder) ->
           done()
         
         stream.end()
