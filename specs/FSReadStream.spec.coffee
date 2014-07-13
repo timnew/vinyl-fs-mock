@@ -52,9 +52,9 @@ describe 'FSReadStream', ->
         b.path.should.equal '/b.bin'
         b.contents.toString('utf8').should.equal 'binary'
 
-    describe 'base path', ->
+    describe 'base and cwd', ->
       fsData = ->
-        '.': ''
+        '.': 'project'
         '..': '/'
         'src':
           'a.txt': 'text'
@@ -67,8 +67,9 @@ describe 'FSReadStream', ->
         dumpStream stream, done, (files) ->        
           file = files[0]
           
-          file.path.should.equal '/src/a.txt'
-          file.base.should.equal '/'
+          file.path.should.equal '/project/src/a.txt'
+          file.base.should.equal '/project'
+          file.cwd.should.equal '/project'
 
       it 'should read file', (done) ->
         fs = createFS fsData()
@@ -78,8 +79,9 @@ describe 'FSReadStream', ->
         dumpStream stream, done, (files) ->        
           file = files[0]
           
-          file.path.should.equal '/src/a.txt'
-          file.base.should.equal '/src'
+          file.path.should.equal '/project/src/a.txt'
+          file.base.should.equal '/project/src'
+          file.cwd.should.equal '/project'
 
 
 

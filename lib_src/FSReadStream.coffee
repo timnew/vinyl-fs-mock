@@ -17,6 +17,7 @@ class FSReadStream extends Readable
     new File
       path: path
       base: @basepath
+      cwd: @fileSystem.fullpath()
       contents: @fileSystem.readFileAsBuffer(path)  
     
   _read: ->
