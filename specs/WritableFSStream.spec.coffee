@@ -85,3 +85,14 @@ describe 'WritableFSStream', ->
         stream.write createFile('/project/src/readme', '/project/src', 'readme')
 
         fs.readFile('/project/dest/readme').should.equal 'readme'
+
+    describe 'events', ->
+      it 'should fire finish event', (done) ->
+        fs = createFS fsData()
+
+        stream = fs.createWriteStream()
+        
+        stream.on 'finish', ->
+          done()
+        
+        stream.end()
