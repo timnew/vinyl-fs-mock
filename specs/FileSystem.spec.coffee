@@ -90,7 +90,8 @@ describe 'FileSystem', ->
         expect ->
           fs.openFolder('/x/y/z')
         .to.throw PathNotExistsException, 'path x/y/z is invalid'
-        
+       
+
       it 'should create path when necessary', ->
         fs = createFS fsData()
 
@@ -103,14 +104,14 @@ describe 'FileSystem', ->
 
         folder = fs.openFolder('/x/y/z')
 
-        folder.should.equal fs.directory     
+        folder.should.equal fs.directory           
 
     it 'should create folder', ->
       fs = createFS fsData()
 
       folder = fs.createFolder('new')
 
-      fs.isFolder('new').should.true
+      fs.isFolder('new').should.true    
 
     describe 'resolve path', ->
       it 'should resolve relative path', ->
@@ -180,14 +181,6 @@ describe 'FileSystem', ->
         fs.writeFile('/x/y/z.txt', 'cool', true)            
         fs.readFile('/x/y/z.txt').should.equal 'cool'
         expect(fs.directory.x.y).to.be.ok
-
-    it 'should open as vinyl file', ->
-      fs = createFS fsData()
-      file = fs.openAsVinylFile('/a.txt')
-      file.should.be.instanceOf File
-      file.path.should.equal '/a.txt'
-      file.isBuffer().should.be.true
-      file.contents.toString('utf8').should.equal 'text'
 
     it 'should delete file', ->
       fs = createFS fsData()

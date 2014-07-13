@@ -4,7 +4,6 @@ Type = require('type-of-is')
 
 PathNotExistsException = require('./PathNotExistsException')
 Buffer = require('buffer').Buffer
-File = require('vinyl')
 
 class FileSystem
   constructor: (@directory) ->
@@ -132,10 +131,5 @@ class FileSystem
     path = @resolvePath(path)
     folder = @openFolder(path, create)
     FileSystem.create path, folder
-
-  openAsVinylFile: (path) ->
-    new File 
-      path: path
-      contents: @readFileAsBuffer(path)  
 
 module.exports = FileSystem

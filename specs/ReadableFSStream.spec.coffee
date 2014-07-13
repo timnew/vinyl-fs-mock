@@ -1,10 +1,14 @@
 require('./spec_helper')
 
-dumpStream = (stream, callback) ->
+dumpStream = (stream, done, callback) ->
   result = []
   
-  stream.on 'end', ->        
-    callback(result)   
+  stream.on 'end', ->      
+    try  
+      callback(result)   
+      done()
+    catch ex
+      done(ex)
 
   stream.on 'readable', ->    
     while data = stream.read()      
@@ -27,19 +31,17 @@ describe 'ReadableFSStream', ->
 
       fs.createReadStream().should.be.instanceOf(ReadableFSStream)
     
-  describe 'read file system', ->
-    fsData = ->
-      '.': ''
-      '..': '/'
-      'a.txt': 'text'
-      'b.bin': new Buffer('binary')
-
-    it 'should read file system', (done) ->
-      fs = createFS fsData()
+  describe 'read file system', ->    
+    it 'should read all files', (done) ->
+      fs = createFS 
+        '.': ''
+        '..': '/'
+        'a.txt': 'text'
+        'b.bin': new Buffer('binary')
 
       stream = fs.createReadStream()
 
-      dumpStream stream, (files) ->
+      dumpStream stream, done, (files) ->
         a = files[0]
         a.should.be.an.instanceOf File
         a.path.should.equal '/a.txt'
@@ -50,4 +52,35 @@ describe 'ReadableFSStream', ->
         b.path.should.equal '/b.bin'
         b.contents.toString('utf8').should.equal 'binary'
 
-        done()
+    describe 'base path', ->
+      fsData = ->
+        '.': ''
+        '..': '/'
+        'src':
+          'a.txt': 'text'
+        
+      it 'should read file', (done) ->
+        fs = createFS fsData()
+        
+        stream = fs.createReadStream()
+
+        dumpStream stream, done, (files) ->        
+          file = files[0]
+          
+          file.path.should.equal '/src/a.txt'
+          file.base.should.equal '/'
+
+      it 'should read file', (done) ->
+        fs = createFS fsData()
+        
+        stream = fs.createReadStream('src')
+
+        dumpStream stream, done, (files) ->        
+          file = files[0]
+          
+          file.path.should.equal '/src/a.txt'
+          file.base.should.equal '/src'
+
+
+
+
