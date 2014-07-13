@@ -2,7 +2,7 @@ require('./spec_helper')
 
 describe 'FileSystemIterator', ->
   {createFS} = require('../index')  
-  FileSystemIterator = createFS.FileSystemIterator
+  {FileSystemIterator} = createFS
 
   it 'should export class', ->
     expect(FileSystemIterator).to.be.ok    
@@ -11,6 +11,8 @@ describe 'FileSystemIterator', ->
     fs = createFS('/',{})
 
     expect(fs.createIterator).to.be.ok.and.to.be.a('function')
+
+    fs.createIterator().should.be.instanceOf(FileSystemIterator)
 
   describe 'iterate through file system', ->
 

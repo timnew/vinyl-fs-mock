@@ -2,14 +2,9 @@ pathUtil = require('path')
 _ = require('lodash')
 Type = require('type-of-is')
 
+PathNotExistsException = require('./PathNotExistsException')
 Buffer = require('buffer').Buffer
 File = require('vinyl')
-
-class PathNotExistsException extends Error
-  constructor: (message) ->
-    @name = this.constructor.name
-    @message = message
-    @stack = (new Error()).stack
 
 class FileSystem
   constructor: (@fs) ->
@@ -140,26 +135,4 @@ class FileSystem
       path: path
       contents: @readFileAsBuffer(path)  
 
-FileSystem.create = (name, path, fs) ->
-  switch arguments.length
-    when 1
-      fs = name
-      root = process.cwd()
-      fs['.'] ?= pathUtil.basename root
-      fs['..'] ?= pathUtil.dirname root
-    when 2
-      fs = path
-      name = pathUtil.resolve name
-      fs['.'] = pathUtil.basename name
-      fs['..'] = pathUtil.dirname name
-    when 3
-      fs['.'] = name
-      fs['..'] = path
-
-  new FileSystem(fs)      
-
-exports = module.exports = FileSystem.create
-exports.FileSystem = FileSystem
-exports.PathNotExistsException = PathNotExistsException
-exports.File = File
-
+module.exports = FileSystem

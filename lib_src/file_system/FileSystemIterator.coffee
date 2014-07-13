@@ -1,5 +1,4 @@
-root = require('./index')
-FileSystem = root.FileSystem
+FileSystem = require('./FileSystem')
 
 class FileSystemIterator 
   constructor: (@fs) ->
