@@ -1,4 +1,5 @@
 pathUtil = require('path')
+_ = require('lodash')
 Type = require('type-of-is')
 
 Buffer = require('buffer').Buffer
@@ -29,16 +30,16 @@ class FileSystem
     pathUtil.join(@path(), @name())  
 
   _localPath: (path) ->    
-    path = pathUtil.resolve(@fullpath(), path)
+    path = @resolvePath(path)
     localPath = pathUtil.relative @fullpath(), path
     localPath.split pathUtil.sep
 
-  openFolder: (path, create) ->
-    path = @_localPath(path) if typeof path is 'string'
+  openFolder: (path, create) ->    
+    path = @_localPath(path) if typeof path is 'string'  
 
-    result = @fs
+    result = @fs    
 
-    for name in path
+    for name in path when name isnt ''
       unless result[name]?
         if create 
           result[name] = {} 
@@ -48,6 +49,22 @@ class FileSystem
       result = result[name]
 
     result
+
+  resolvePath: (path) ->
+    pathUtil.resolve(@fullpath(), path)
+
+  listFiles: (path) ->    
+    path = @resolvePath(path)    
+    
+    folder = @openFolder(path)  
+    
+    _.chain folder      
+      .keys()
+      .filter (name) ->
+        name != '.' and name != '..'
+      .map (name) ->        
+        pathUtil.join(path, name)
+      .value()
 
   writeFile: (path, content, create) ->
     path = @_localPath(path)
@@ -84,11 +101,15 @@ class FileSystem
       return false if Type.is(ex, PathNotExistsException)
 
       throw ex
-    
-
+      
   readFileAsBuffer: (path) ->
     content = @readFile(path)
     content = new Buffer(content) unless Buffer.isBuffer(content)
+    content
+
+  readFileAsString: (path, encoding = 'utf8') ->
+    content = @readFile(path)
+    content = content.toString(encoding) unless _.isString(content)
     content
 
   entryType: (path) ->        
@@ -110,14 +131,14 @@ class FileSystem
     type[..4] == 'file.'
 
   subFileSystem: (path, create) ->
-    path = pathUtil.resolve(@fullpath(), path)
+    path = @resolvePath(path)
     folder = @openFolder(path, create)
     FileSystem.create path, folder
 
-  openFile: (path) ->
+  openAsVinylFile: (path) ->
     new File 
       path: path
-      contents: @readFileAsBuffer(path)
+      contents: @readFileAsBuffer(path)  
 
 FileSystem.create = (name, path, fs) ->
   switch arguments.length

@@ -1,7 +1,7 @@
 require('./spec_helper')
 
 describe 'FileSystem', ->
-  createFS = require('../lib/fake_fs/FileSystem')
+  {createFS} = require('../index') 
   FileSystem = createFS.FileSystem
   PathNotExistsException = createFS.PathNotExistsException
   File = createFS.File
@@ -126,17 +126,67 @@ describe 'FileSystem', ->
           fs.openFolder('/x/y/z')
         .to.throw PathNotExistsException, 'path x/y/z is invalid'
         
-      it 'should create path when ncessary', ->
+      it 'should create path when necessary', ->
         fs = createFS fsData()
 
         folder = fs.openFolder('/x/y/z', true)
 
         expect(fs.fs.x.y.z).to.be.ok
 
-    it 'should open file', ->
-      fs = createFS fsData()
+      it 'should resolve root', ->
+        fs = createFS '/x/y/z', fsData()
 
-      fs.readFile('/a.txt').should.equal 'text'      
+        folder = fs.openFolder('/x/y/z')
+
+        folder.should.equal fs.fs     
+
+    describe 'resolve path', ->
+      it 'should resolve relative path', ->
+        fs = createFS '/x/y/z', fsData()        
+
+        fs.resolvePath('folder').should.equal '/x/y/z/folder'
+
+      it 'should resolve full path', ->
+        fs = createFS '/x/y/z', fsData()        
+
+        fs.resolvePath('/x/y/z/folder').should.equal '/x/y/z/folder'
+
+      it 'should handle tail /', ->
+        fs = createFS '/x/y/z', fsData()        
+
+        fs.resolvePath('/x/y/z/folder/').should.equal '/x/y/z/folder'
+
+      it 'should handle ..', ->
+        fs = createFS '/x/y/z', fsData()        
+
+        fs.resolvePath('/x/y/z/../.././').should.equal '/x'
+
+    it 'should list files', ->
+      fs = createFS '/x/y/z', fsData()
+
+      files = fs.listFiles('/x/y/z/')
+      files.should.have.members [
+        '/x/y/z/a.txt',
+        '/x/y/z/b.bin',
+        '/x/y/z/folder'
+      ]
+
+    describe 'read file', ->
+      
+      it 'should read file', ->
+        fs = createFS fsData()
+
+        fs.readFile('/a.txt').should.equal 'text'      
+
+      it 'should read file as text', ->
+        fs = createFS fsData()
+
+        fs.readFileAsString('/b.bin').should.equal 'binary'  
+
+      it 'should read file as buffer', ->
+        fs = createFS fsData()
+
+        fs.readFileAsBuffer('/a.txt').should.be.instanceOf Buffer
 
     describe 'write file', ->
       
@@ -159,9 +209,9 @@ describe 'FileSystem', ->
         fs.readFile('/x/y/z.txt').should.equal 'cool'
         expect(fs.fs.x.y).to.be.ok
 
-    it 'should open file', ->
+    it 'should open as vinyl file', ->
       fs = createFS fsData()
-      file = fs.openFile('/a.txt')
+      file = fs.openAsVinylFile('/a.txt')
       file.should.be.instanceOf File
       file.path.should.equal '/a.txt'
       file.isBuffer().should.be.true
