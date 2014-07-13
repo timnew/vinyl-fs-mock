@@ -7,12 +7,12 @@ class ReadableFSStream extends Readable
       objectMode: true
 
   _read: ->
-    path = @iterator.next()
+    path = @iterator.next()    
 
     if path?
-      file = @fs.openAsVinylFile(path)
+      file = @fs.openAsVinylFile(path)      
       @push(file)
-    else
+    else                  
       @push(null)
 
 module.exports = ReadableFSStream

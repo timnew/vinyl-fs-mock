@@ -38,9 +38,7 @@ describe 'FileSystemIterator', ->
       files = []
       
       while next = iterator.next() 
-        files.push next
-
-      console.log files
+        files.push next      
 
       files.should.have.members [
         '/project/src/a.txt'
