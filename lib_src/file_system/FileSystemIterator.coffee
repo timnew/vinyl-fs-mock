@@ -1,10 +1,10 @@
 FileSystem = require('./FileSystem')
 
 class FileSystemIterator 
-  constructor: (@fileSystem) ->
+  constructor: (@fileSystem, @basepath = '.') ->
     @fileList = []
 
-    @traversal('.')
+    @traversal(@basepath)
 
   traversal: (path) ->
     files = @fileSystem.listFiles(path)
@@ -22,7 +22,7 @@ class FileSystemIterator
 
 root.FileSystemIterator = FileSystemIterator
 
-FileSystem.prototype.createIterator = ->
-  new FileSystemIterator(this)
+FileSystem.prototype.createIterator = (path) ->
+  new FileSystemIterator(this, path)
   
 module.exports = FileSystemIterator

@@ -20,12 +20,12 @@ describe 'ReadableFSStream', ->
     it 'should export ReadableFSStream', ->
       expect(ReadableFSStream).to.exist.and.to.be.a('function')
 
-    it 'should export createReadableStream factory function', ->
+    it 'should expors.createReadStream factory function', ->
       fs = createFS('/',{})
 
-      expect(fs.createReadableStream).to.be.ok.and.to.be.a('function')
+      expect(fs.createReadStream).to.be.ok.and.to.be.a('function')
 
-      fs.createReadableStream().should.be.instanceOf(ReadableFSStream)
+      fs.createReadStream().should.be.instanceOf(ReadableFSStream)
     
   describe 'read file system', ->
     fsData = ->
@@ -37,7 +37,7 @@ describe 'ReadableFSStream', ->
     it 'should read file system', (done) ->
       fs = createFS fsData()
 
-      stream = fs.createReadableStream()
+      stream = fs.createReadStream()
 
       dumpStream stream, (files) ->
         a = files[0]

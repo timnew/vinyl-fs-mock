@@ -8,90 +8,80 @@ describe 'WritableFSStream', ->
     it 'should export WritableFSStream', ->
       expect(WritableFSStream).to.exist.and.to.be.a('function')
 
-    it 'should export createWritableFSStream factory function', ->
+    it 'should export createWriteStream factory function', ->
       fs = createFS('/',{})
 
-      expect(fs.createWritableFSStream).to.be.ok.and.to.be.a('function')
+      expect(fs.createWriteStream).to.be.ok.and.to.be.a('function')
 
-      fs.createWritableFSStream().should.be.instanceOf(WritableFSStream)
-    
-  describe 'createWritableFSStream', ->
-    fsData = ->
-      '.': 'src'
-      '..': '/project'
-      'css': 
-        'a.css': 'a'
-      'js': 
-        'b.js': 'b'
-
-    it 'should create file system', ->
-      fs = createFS fsData()
-
-      stream = fs.createWritableFSStream()
-
-      stream.fileSystem.fullpath().should.equal '/project/src'
-    
-    it 'should create file system based on given path', ->
-      fs = createFS fsData()
-
-      stream = fs.createWritableFSStream('css')
-
-      stream.fileSystem.fullpath().should.equal '/project/src/css'
-
-    it 'should create folder when necessary', ->
-      fs = createFS fsData()
-
-      stream = fs.createWritableFSStream('html', true)
-
-      stream.fileSystem.fullpath().should.equal '/project/src/html'
+      fs.createWriteStream().should.be.instanceOf(WritableFSStream)
   
   describe 'write file', ->
     fsData = ->
-      '.': 'src'
-      '..': '/project'
-      'css': 
-        'a.css': 'a'
-      'js': 
-        'b.js': 'b'    
+      '.': 'project'
+      '..': '/'
+      'src':
+        'css': 
+          'a.css': 'a'
+        'js': 
+          'b.js': 'b'    
 
-    createFile = (path, content) ->
+    createFile = (path, basepath, content) ->
+      unless content?
+        content = basepath
+        basepath = undefined
+
       new File
         path: path
+        base :basepath
         contents: if content? then new Buffer(content) else null
 
-    it 'should write file', ->
-      fs = createFS fsData()
+    describe 'content', ->
 
-      stream = fs.createWritableFSStream()
+      it 'should write file', ->
+        fs = createFS fsData()
+
+        stream = fs.createWriteStream()
+        
+        stream.write createFile('/project/src/css/a.css','css')
+
+        fs.readFile('/project/src/css/a.css').should.equal 'css'
+
+      it 'should write empty file', ->
+        fs = createFS fsData()
+
+        stream = fs.createWriteStream()
+        
+        stream.write createFile('/project/src/css/a.css', null)
+
+        fs.readFile('/project/src/css/a.css').should.equal ''
+
+    describe 'create path', ->
       
-      stream.write createFile('/project/src/css/a.css','css')
+      it 'should create new file', ->
+        fs = createFS fsData()
 
-      fs.readFile('/project/src/css/a.css').should.equal 'css'
+        stream = fs.createWriteStream()
+        
+        stream.write createFile('/project/src/readme', 'readme')
 
-    it 'should write empty file', ->
-      fs = createFS fsData()
+        fs.readFile('/project/src/readme').should.equal 'readme'
+     
+      it 'should create folder when necessary', ->
+        fs = createFS fsData()
 
-      stream = fs.createWritableFSStream()
-      
-      stream.write createFile('/project/src/css/a.css', null)
+        stream = fs.createWriteStream()
+        
+        stream.write createFile('/project/src/html/c.html', 'c')
 
-      fs.readFile('/project/src/css/a.css').should.equal ''
+        fs.readFile('/project/src/html/c.html').should.equal 'c'
 
-    it 'should create new file', ->
-      fs = createFS fsData()
+    describe 'relative path', ->
 
-      stream = fs.createWritableFSStream()
-      
-      stream.write createFile('/project/src/readme', 'readme')
+      it 'should override path', ->
+        fs = createFS fsData()
 
-      fs.readFile('/project/src/readme').should.equal 'readme'
-   
-    it 'should create folder when necessary', ->
-      fs = createFS fsData()
+        stream = fs.createWriteStream('/project/dest')
+        
+        stream.write createFile('/project/src/readme', '/project/src', 'readme')
 
-      stream = fs.createWritableFSStream()
-      
-      stream.write createFile('/project/src/html/c.html', 'c')
-
-      fs.readFile('/project/src/html/c.html').should.equal 'c'
-
+        fs.readFile('/project/dest/readme').should.equal 'readme'

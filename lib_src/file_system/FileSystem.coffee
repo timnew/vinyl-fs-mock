@@ -68,8 +68,8 @@ class FileSystem
     path = @_localPath(path)
     
     filename = path.pop()
-
-    folder = @openFolder(path, create)
+    
+    folder = @openFolder(path, create)    
 
     folder[filename] = content
 
