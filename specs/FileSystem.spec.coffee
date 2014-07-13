@@ -31,7 +31,7 @@ describe 'FileSystem', ->
       fs.name().should.equal 'project'
       fs.name('new').should.equal('new')
       fs.name().should.equal 'new'
-      fs.fs['.'].should.equal 'new'
+      fs.directory['.'].should.equal 'new'
 
     it 'should read and write path', ->
       fs = createFS(fsData())
@@ -39,7 +39,7 @@ describe 'FileSystem', ->
       fs.path().should.equal '/projects'
       fs.path('/new').should.equal('/new')
       fs.path().should.equal '/new'
-      fs.fs['..'].should.equal '/new'
+      fs.directory['..'].should.equal '/new'
 
     it 'should populate fullpath', ->
       fs = createFS(fsData())
@@ -96,14 +96,14 @@ describe 'FileSystem', ->
 
         folder = fs.openFolder('/x/y/z', true)
 
-        expect(fs.fs.x.y.z).to.be.ok
+        expect(fs.directory.x.y.z).to.be.ok
 
       it 'should resolve root', ->
         fs = createFS '/x/y/z', fsData()
 
         folder = fs.openFolder('/x/y/z')
 
-        folder.should.equal fs.fs     
+        folder.should.equal fs.directory     
 
     describe 'resolve path', ->
       it 'should resolve relative path', ->
@@ -172,7 +172,7 @@ describe 'FileSystem', ->
 
         fs.writeFile('/x/y/z.txt', 'cool', true)            
         fs.readFile('/x/y/z.txt').should.equal 'cool'
-        expect(fs.fs.x.y).to.be.ok
+        expect(fs.directory.x.y).to.be.ok
 
     it 'should open as vinyl file', ->
       fs = createFS fsData()
@@ -185,7 +185,7 @@ describe 'FileSystem', ->
     it 'should delete file', ->
       fs = createFS fsData()
       fs.deleteFile '/a.txt'
-      expect(fs.fs['/a.txt']).to.not.exist
+      expect(fs.directory['/a.txt']).to.not.exist
 
     it 'should check file existence', ->
       fs = createFS fsData()

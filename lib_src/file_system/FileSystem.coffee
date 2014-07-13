@@ -7,19 +7,19 @@ Buffer = require('buffer').Buffer
 File = require('vinyl')
 
 class FileSystem
-  constructor: (@fs) ->
+  constructor: (@directory) ->
 
   name: ->
     if(arguments.length == 0)
-      @fs['.']
+      @directory['.']
     else
-      @fs['.'] = arguments[0]
+      @directory['.'] = arguments[0]
 
   path: ->
     if(arguments.length == 0)
-      @fs['..']
+      @directory['..']
     else
-      @fs['..'] = arguments[0]
+      @directory['..'] = arguments[0]
 
   fullpath: ->      
     pathUtil.join(@path(), @name())  
@@ -32,7 +32,7 @@ class FileSystem
   openFolder: (path, create) ->    
     path = @_localPath(path) if typeof path is 'string'  
 
-    result = @fs    
+    result = @directory    
 
     for name in path when name isnt ''
       unless result[name]?

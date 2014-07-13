@@ -17,7 +17,7 @@ describe 'createFS', ->
       fs = createFS('sample', '/projects', fsData())
       fs.should.be.instanceOf FileSystem
 
-      fs.fs.should.has.keys '.', '..', 'a.txt', 'b.config'
+      fs.directory.should.has.keys '.', '..', 'a.txt', 'b.config'
       fs.name().should.equal 'sample'
       fs.path().should.equal '/projects'
 
@@ -25,7 +25,7 @@ describe 'createFS', ->
       fs = createFS('/projects/sample', fsData())
       fs.should.be.instanceOf FileSystem
 
-      fs.fs.should.has.keys '.', '..', 'a.txt', 'b.config'
+      fs.directory.should.has.keys '.', '..', 'a.txt', 'b.config'
       fs.name().should.equal 'sample'
       fs.path().should.equal '/projects'
     
@@ -34,7 +34,7 @@ describe 'createFS', ->
         fs = createFS(fsData())
         fs.should.be.instanceOf FileSystem      
 
-        fs.fs.should.has.keys '.', '..', 'a.txt', 'b.config'
+        fs.directory.should.has.keys '.', '..', 'a.txt', 'b.config'
         fs.name().should.equal require('path').basename process.cwd()
         fs.path().should.equal require('path').dirname process.cwd()
 
@@ -45,6 +45,6 @@ describe 'createFS', ->
         fs = createFS(data)
         fs.should.be.instanceOf FileSystem      
 
-        fs.fs.should.has.keys '.', '..', 'a.txt', 'b.config'
+        fs.directory.should.has.keys '.', '..', 'a.txt', 'b.config'
         fs.name().should.equal 'project'
         fs.path().should.equal '/projects'

@@ -2,7 +2,7 @@ FileSystem = require('./FileSystem')
 Readable = require('readable-stream/readable')
 
 class ReadableFSStream extends Readable
-  constructor: (@fs, @iterator) ->
+  constructor: (@fileSystem, @iterator) ->
     super
       objectMode: true
 
@@ -10,7 +10,7 @@ class ReadableFSStream extends Readable
     path = @iterator.next()    
 
     if path?
-      file = @fs.openAsVinylFile(path)      
+      file = @fileSystem.openAsVinylFile(path)      
       @push(file)
     else                  
       @push(null)

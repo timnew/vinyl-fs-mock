@@ -1,16 +1,16 @@
 FileSystem = require('./FileSystem')
 
 class FileSystemIterator 
-  constructor: (@fs) ->
+  constructor: (@fileSystem) ->
     @fileList = []
 
     @traversal('.')
 
   traversal: (path) ->
-    files = @fs.listFiles(path)
+    files = @fileSystem.listFiles(path)
 
     for file in files
-      if @fs.isFolder(file)
+      if @fileSystem.isFolder(file)
         @traversal(file)
       else
         @fileList.push file
