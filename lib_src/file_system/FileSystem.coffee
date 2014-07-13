@@ -108,7 +108,7 @@ class FileSystem
     content
 
   entryType: (path) ->        
-    switch Type.of(@readFile(path)).name
+    switch Type.string(@readFile(path))
       when 'Object'
         'folder'
       when 'Buffer'
