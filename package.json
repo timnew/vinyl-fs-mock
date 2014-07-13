@@ -4,7 +4,7 @@
   "description": "A fake file system implementation, used for test code written based on vinyl and vinyl-fs. Including gulp plugins",
   "main": "index.js",
   "scripts": {
-    "test": "gulp mocha"
+    "test": "./node_modules/.bin/gulp mocha"
   },
   "repository": {
     "type": "git",
