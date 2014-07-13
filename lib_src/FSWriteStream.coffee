@@ -2,7 +2,7 @@ pathUtil = require('path')
 FileSystem = require('./FileSystem')
 Writable = require('readable-stream/writable')
 
-class WritableFSStream extends Writable
+class FSWriteStream extends Writable
   constructor: (@fileSystem, @basepath) ->
     super
       objectMode: true
@@ -25,7 +25,7 @@ class WritableFSStream extends Writable
     return '' if file.isNull()
     throw new Error('Not Supported')
 
-module.exports = WritableFSStream
+module.exports = FSWriteStream
 
 FileSystem.prototype.createWriteStream = (path) ->
-  new WritableFSStream(this, path)
+  new FSWriteStream(this, path)

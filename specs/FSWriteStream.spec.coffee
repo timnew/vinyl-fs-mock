@@ -1,19 +1,19 @@
 require('./spec_helper')
 
-describe 'WritableFSStream', ->
+describe 'FSWriteStream', ->
   createFS = require('../index')  
-  {WritableFSStream, File} = createFS
+  {FSWriteStream, File} = createFS
 
   describe 'exports', ->
-    it 'should export WritableFSStream', ->
-      expect(WritableFSStream).to.exist.and.to.be.a('function')
+    it 'should export FSWriteStream', ->
+      expect(FSWriteStream).to.exist.and.to.be.a('function')
 
     it 'should export createWriteStream factory function', ->
       fs = createFS('/',{})
 
       expect(fs.createWriteStream).to.be.ok.and.to.be.a('function')
 
-      fs.createWriteStream().should.be.instanceOf(WritableFSStream)
+      fs.createWriteStream().should.be.instanceOf(FSWriteStream)
   
   describe 'write file', ->
     fsData = ->

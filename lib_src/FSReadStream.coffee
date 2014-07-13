@@ -3,7 +3,7 @@ File = require('vinyl')
 FileSystem = require('./FileSystem')
 Readable = require('readable-stream/readable')
 
-class ReadableFSStream extends Readable
+class FSReadStream extends Readable
   constructor: (@fileSystem, @iterator, basepath) ->
     super
       objectMode: true
@@ -27,7 +27,7 @@ class ReadableFSStream extends Readable
     else
       @push null
     
-module.exports = ReadableFSStream
+module.exports = FSReadStream
 
 FileSystem.prototype.createReadStream = (path) ->
-  new ReadableFSStream(this, @createIterator(path), path)
+  new FSReadStream(this, @createIterator(path), path)

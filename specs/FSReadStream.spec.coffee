@@ -16,20 +16,20 @@ dumpStream = (stream, done, callback) ->
 
   stream.resume()
 
-describe 'ReadableFSStream', ->
+describe 'FSReadStream', ->
   createFS = require('../index')  
-  {ReadableFSStream, File} = createFS
+  {FSReadStream, File} = createFS
 
   describe 'exports', ->
-    it 'should export ReadableFSStream', ->
-      expect(ReadableFSStream).to.exist.and.to.be.a('function')
+    it 'should export FSReadStream', ->
+      expect(FSReadStream).to.exist.and.to.be.a('function')
 
     it 'should expors.createReadStream factory function', ->
       fs = createFS('/',{})
 
       expect(fs.createReadStream).to.be.ok.and.to.be.a('function')
 
-      fs.createReadStream().should.be.instanceOf(ReadableFSStream)
+      fs.createReadStream().should.be.instanceOf(FSReadStream)
     
   describe 'read file system', ->    
     it 'should read all files', (done) ->
