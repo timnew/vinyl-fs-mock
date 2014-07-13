@@ -1,13 +1,15 @@
-gulp-fake-fs [![NPM version][npm-image]][npm-url] [![Build Status][ci-image]][ci-url] [![Dependency Status][depstat-image]][depstat-url]
+vinyl-fs-mock [![NPM version][npm-image]][npm-url] [![Build Status][ci-image]][ci-url] [![Dependency Status][depstat-image]][depstat-url]
 ================
 
-> A fake implementation for vinyl-fs, which is used in gulp. Useful for gulp plugin test.
+> A fake file system implementation, used for test code written based on [vinyl]() and [vinyl-fs](). 
+> Useful for [gulp]() plugin unit test. 
+> With [vinyl-fs-mock][homepage], all the file fixtures can be provided inline. So not more external fixtures needed.
 
 ## Install
 
 Install using [npm][npm-url].
 
-    $ npm install gulp-fake-fs
+    $ npm install vinyl-fs-mock
 
 ## Usage
 
@@ -20,12 +22,14 @@ MIT
 
 [![NPM downloads][npm-downloads]][npm-url]
 
-[npm-url]: https://npmjs.org/package/gulp-fake-fs
-[npm-image]: http://img.shields.io/npm/v/gulp-fake-fs.svg?style=flat
-[npm-downloads]: http://img.shields.io/npm/dm/gulp-fake-fs.svg?style=flat
+[homepage]: https://github.com/timnew/vinyl-fs-mock
 
-[ci-url]: https://drone.io/github.com/timnew/gulp-fake-fs/latest
-[ci-image]: https://drone.io/github.com/timnew/gulp-fake-fs/status.png
+[npm-url]: https://npmjs.org/package/vinyl-fs-mock
+[npm-image]: http://img.shields.io/npm/v/vinyl-fs-mock.svg?style=flat
+[npm-downloads]: http://img.shields.io/npm/dm/vinyl-fs-mock.svg?style=flat
 
-[depstat-url]: https://gemnasium.com/timnew/gulp-fake-fs
-[depstat-image]: http://img.shields.io/gemnasium/timnew/gulp-fake-fs.svg?style=flat
+[ci-url]: https://drone.io/github.com/timnew/vinyl-fs-mock/latest
+[ci-image]: https://drone.io/github.com/timnew/vinyl-fs-mock/status.png
+
+[depstat-url]: https://gemnasium.com/timnew/vinyl-fs-mock
+[depstat-image]: http://img.shields.io/gemnasium/timnew/vinyl-fs-mock.svg?style=flat

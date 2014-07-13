@@ -1,7 +1,7 @@
 {
-  "name": "gulp-mock-fs",
+  "name": "vinyl-fs-mock",
   "version": "0.1.0",
-  "description": "A fake implementation for vinyl-fs, which is used in gulp. Useful for gulp plugin test.",
+  "description": "A fake file system implementation, used for test code written based on vinyl and vinyl-fs. Including gulp plugins",
   "main": "index.js",
   "scripts": {
     "test": "gulp mocha"
@@ -12,13 +12,14 @@
   },
   "keywords": [
     "gulp",
-    "gulp-plugin",
-    "plugin",
+    "gulp-plugin",    
     "vinyl",
     "vinyl-fs",
     "mock",
     "fake",
-    "test"
+    "test",
+    "file",
+    "file system"
   ],
   "author": "timnew <timnew.wti@gmail.com> (https://timnew.github.io/)",
   "license": "MIT",
@@ -39,8 +40,7 @@
   },
   "dependencies": {
     "lodash": "^2.4.1",
-    "readable-stream": "^1.0.27-1",
-    "type-of": "^2.0.1",
+    "readable-stream": "^1.0.27-1",    
     "type-of-is": "^3.3.0",
     "vinyl": "^0.2.3"
   }
