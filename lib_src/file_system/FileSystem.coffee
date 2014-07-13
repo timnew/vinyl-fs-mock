@@ -29,6 +29,9 @@ class FileSystem
     localPath = pathUtil.relative @fullpath(), path
     localPath.split pathUtil.sep
 
+  createFolder: (path) ->
+    @openFolder(path, true)
+
   openFolder: (path, create) ->    
     path = @_localPath(path) if typeof path is 'string'  
 

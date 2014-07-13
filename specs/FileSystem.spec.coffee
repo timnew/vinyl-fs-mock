@@ -69,7 +69,7 @@ describe 'FileSystem', ->
       'b.bin': new Buffer('binary')
       'folder':
         'c.config': 'config' 
-        
+
     describe 'open folder', ->
       it 'should accept realive path', ->      
         fs = createFS '/x/y/z', fsData()
@@ -104,6 +104,13 @@ describe 'FileSystem', ->
         folder = fs.openFolder('/x/y/z')
 
         folder.should.equal fs.directory     
+
+    it 'should create folder', ->
+      fs = createFS fsData()
+
+      folder = fs.createFolder('new')
+
+      fs.isFolder('new').should.true
 
     describe 'resolve path', ->
       it 'should resolve relative path', ->
