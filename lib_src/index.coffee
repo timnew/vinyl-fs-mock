@@ -1,3 +1,2 @@
-exports = module.exports = 
-  gulp: require('./FakeGulp')
+exports = module.exports =   
   createFS: require('./file_system')
