@@ -75,6 +75,13 @@ describe 'FSWriteStream', ->
 
         fs.readFile('/project/src/html/c.html').should.equal 'c'
 
+      it 'should create folder when created', ->
+        fs = createFS fsData()
+
+        stream = fs.createWriteStream('x/y/z')
+        
+        fs.isFolder('x/y/z').should.be.true
+
     describe 'relative path', ->
 
       it 'should override path', ->

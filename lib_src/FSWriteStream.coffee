@@ -3,9 +3,16 @@ FileSystem = require('./FileSystem')
 Writable = require('readable-stream/writable')
 
 class FSWriteStream extends Writable
-  constructor: (@fileSystem, @basepath) ->
+  constructor: (@fileSystem, basepath) ->
     super
       objectMode: true
+  
+    @basepath = if basepath?
+                  pathUtil.resolve(@fileSystem.fullpath(), basepath)
+                else
+                  @fileSystem.fullpath()
+
+    @fileSystem.openFolder(@basepath, true)
   
   _write: (file, encoding, next) ->     
     try
