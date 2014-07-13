@@ -26,6 +26,7 @@ describe 'smoke test', ->
         bare: true
       .pipe fs.createWriteStream('dest/js', true)
       .onFinished done, (folder) ->
+        console.log fs.directory  # Display whole tree of files
         folder.should.equal fs.openFolder('dest/js')                
         folder['sample.js'].should.not.be.null
         folder['another.js'].should.not.be.null
