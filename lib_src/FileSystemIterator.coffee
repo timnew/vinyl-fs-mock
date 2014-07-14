@@ -33,10 +33,8 @@ class FileSystemIterator
 
     return    
 
-  reset: ->
-    console.log @candidates
+  reset: ->    
     @result = @candidates.filter @filterChain
-    console.log @result
 
   next: ->
     @result.shift()

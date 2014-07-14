@@ -1,6 +1,7 @@
 pathUtil = require('path')
 FileSystem = require('./FileSystem')
 Writable = require('readable-stream/writable')
+deprecate = require('util-deprecate')
 
 class FSWriteStream extends Writable
   constructor: (@fileSystem, basepath) ->
@@ -43,5 +44,8 @@ class FSWriteStream extends Writable
   
 module.exports = FSWriteStream
 
-FileSystem.prototype.createWriteStream = (path) ->
+createWriteStream = (path) ->
   new FSWriteStream(this, path)
+
+FileSystem.prototype.createWriteStream = deprecate createWriteStream, 'fileSystem.createWriteStream is deprecated, use fileSystem.dest instead'
+

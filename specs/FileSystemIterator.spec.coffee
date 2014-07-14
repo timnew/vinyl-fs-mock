@@ -93,10 +93,10 @@ describe 'FileSystemIterator', ->
         '/project/src/f/ff/fff/ffff/d.txt'
       ]      
 
-    xit 'should apply glob', ->
+    it 'should apply glob', ->
       fs = createFS fsData()
 
-      iterator = fs.createIterator(['*.txt', '**/*.txt'])
+      iterator = fs.createIterator(['*.txt', '!d.txt'])
       iterator.batchFetch().should.have.members [
         '/project/src/a.txt'
         '/project/src/f/b.txt'       
