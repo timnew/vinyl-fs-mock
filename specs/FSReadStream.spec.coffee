@@ -71,14 +71,14 @@ describe 'FSReadStream', ->
           file.base.should.equal '/project'
           file.cwd.should.equal '/project'
 
-      it 'should read file', (done) ->
+      it 'should set base', (done) ->
         fs = createFS fsData()
         
         stream = fs.createReadStream('src')
 
         dumpStream stream, done, (files) ->        
           file = files[0]
-          
+          expect(file).to.exist
           file.path.should.equal '/project/src/a.txt'
           file.base.should.equal '/project/src'
           file.cwd.should.equal '/project'

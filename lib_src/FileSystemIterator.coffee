@@ -1,10 +1,26 @@
 FileSystem = require('./FileSystem')
+Type = require('type-of-is')
+
+{createFilterChain} = require('./PathFilters')
 
 class FileSystemIterator 
-  constructor: (@fileSystem, @basepath = '.') ->
-    @fileList = []
+  constructor: (@fileSystem, basepath, patterns) ->
+    @candidates = []
 
-    @traversal(@basepath)
+    unless patterns?
+      patterns = basepath
+      basepath = '.'      
+
+    @basepath = basepath   
+
+    @patterns = patterns ? []
+    @patterns = [@patterns] unless Type.is(@patterns, Array)    
+    
+    @filterChain = createFilterChain(@basepath, @patterns)
+
+    @traversal(@basepath)    
+
+    @reset()
 
   traversal: (path) ->
     files = @fileSystem.listFiles(path)
@@ -13,16 +29,24 @@ class FileSystemIterator
       if @fileSystem.isFolder(file)
         @traversal(file)
       else
-        @fileList.push file
+        @candidates.push file
 
-    @fileList
+    return    
+
+  reset: ->
+    console.log @candidates
+    @result = @candidates.filter @filterChain
+    console.log @result
 
   next: ->
-    @fileList.shift()
+    @result.shift()
+
+  batchFetch: ->
+    @result
 
 root.FileSystemIterator = FileSystemIterator
 
-FileSystem.prototype.createIterator = (path) ->
-  new FileSystemIterator(this, path)
+FileSystem.prototype.createIterator = (path, glob) ->
+  new FileSystemIterator(this, path, glob)
   
 module.exports = FileSystemIterator

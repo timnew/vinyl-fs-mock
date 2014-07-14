@@ -14,8 +14,8 @@ argv = require('yargs')
 
 paths = 
   source:
-    coffee: ['lib_src/*.coffee','lib_src/**/*.coffee']    
-    spec: [['specs/*.spec.coffee', 'specs/**/*.spec.coffee'], {read: false}]
+    coffee: ['lib_src/**/*.coffee']    
+    spec: [['specs/**/*.spec.coffee'], {read: false}]
     manifest: ['./package.json']
   dest:
     root: '.'

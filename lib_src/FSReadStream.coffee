@@ -30,5 +30,5 @@ class FSReadStream extends Readable
     
 module.exports = FSReadStream
 
-FileSystem.prototype.createReadStream = (path) ->
-  new FSReadStream(this, @createIterator(path), path)
+FileSystem.prototype.createReadStream = (path = '.') ->
+  new FSReadStream(this, @createIterator(path, []), path)

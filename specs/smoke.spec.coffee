@@ -5,7 +5,7 @@ describe 'smoke test', ->
   createFS = require('../index')
   coffee = require('gulp-coffee')
   
-  it 'should replace gulp', (done) ->  
+  it 'should mock gulp', (done) ->  
     fs = createFS
           src:
             coffee:
