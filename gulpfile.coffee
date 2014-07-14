@@ -3,6 +3,7 @@ require('coffee-script/register')
 gulp = require('gulp')
 del = require('del')
 coffee = require('gulp-coffee')
+plumber = require('gulp-plumber')
 bump = require('gulp-bump')
 mocha = require('gulp-mocha')
 
@@ -26,11 +27,13 @@ gulp.task 'clean', ->
 
 gulp.task 'coffee', ->
   gulp.src paths.source.coffee
+    .pipe plumber()
     .pipe coffee()
     .pipe gulp.dest paths.dest.coffee
 
 gulp.task 'mocha', ['coffee'], ->
   gulp.src paths.source.spec[0], paths.source.spec[1]
+    .pipe plumber()
     .pipe mocha({reporter: 'spec', growl: true})    
 
 gulp.task 'build', ['clean', 'coffee', 'mocha']
