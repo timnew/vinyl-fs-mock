@@ -4,16 +4,16 @@ Writable = require('readable-stream/writable')
 deprecate = require('util-deprecate')
 
 class FSWriteStream extends Writable
-  constructor: (@fileSystem, basepath) ->
+  constructor: (@fileSystem, folder, cwd) ->
     super
       objectMode: true
+    
+    @cwd = cwd ? @fileSystem.fullpath()
+    folder = folder ? '.'
 
-    @basepath = if basepath?
-                  pathUtil.resolve(@fileSystem.fullpath(), basepath)
-                else
-                  @fileSystem.fullpath()
+    @path = pathUtil.resolve(@cwd, folder)
 
-    @fileSystem.openFolder(@basepath, true)
+    @fileSystem.openFolder(@path, true)
   
   _write: (file, encoding, next) ->     
     try
@@ -23,10 +23,10 @@ class FSWriteStream extends Writable
       next(ex)
 
   resolvePath: (file) ->
-    return file.path unless @basepath?
+    return file.path unless @path?
 
     relativePath = pathUtil.relative file.base, file.path
-    pathUtil.join @basepath, relativePath
+    pathUtil.join @path, relativePath
 
   dumpFile: (file) ->
     return file.contents.toString('utf8') if file.isBuffer()
@@ -36,12 +36,11 @@ class FSWriteStream extends Writable
   onFinished: (done, callback) ->
     @on 'finish', =>
       try        
-        callback @fileSystem.openFolder(@basepath)
+        callback @fileSystem.openFolder(@path)
         done()
       catch ex
         done(ex)
-  
-  
+    
 module.exports = FSWriteStream
 
 createWriteStream = (path) ->
@@ -49,3 +48,6 @@ createWriteStream = (path) ->
 
 FileSystem.prototype.createWriteStream = deprecate createWriteStream, 'fileSystem.createWriteStream is deprecated, use fileSystem.dest instead'
 
+FileSystem.prototype.dest = (folder, options = {}) ->
+  new FSWriteStream(this, folder, options.cwd)
+  

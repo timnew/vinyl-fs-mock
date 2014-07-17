@@ -8,12 +8,19 @@ describe 'FSWriteStream', ->
     it 'should export FSWriteStream', ->
       expect(FSWriteStream).to.exist.and.to.be.a('function')
 
-    it 'should export createWriteStream factory function', ->
+    it 'should export createWriteStream factory function', -> # Deprecated
       fs = createFS('/',{})
 
       expect(fs.createWriteStream).to.be.ok.and.to.be.a('function')
 
       fs.createWriteStream().should.be.instanceOf(FSWriteStream)
+  
+    it 'should export dest factory function', ->
+      fs = createFS('/',{})
+
+      expect(fs.createWriteStream).to.be.ok.and.to.be.a('function')
+
+      fs.dest().should.be.instanceOf(FSWriteStream)
   
   describe 'write file', ->
     fsData = ->
