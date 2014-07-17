@@ -24,12 +24,19 @@ describe 'FSReadStream', ->
     it 'should export FSReadStream', ->
       expect(FSReadStream).to.exist.and.to.be.a('function')
 
-    it 'should expors.createReadStream factory function', ->
+    it 'should expors.createReadStream factory function', -> # Deprecated
       fs = createFS('/',{})
 
       expect(fs.createReadStream).to.be.ok.and.to.be.a('function')
 
       fs.createReadStream().should.be.instanceOf(FSReadStream)
+    
+    it 'should expors fs.src factory function', ->
+      fs = createFS('/',{})
+
+      expect(fs.src).to.be.ok.and.to.be.a('function')
+
+      fs.src(['*.txt']).should.be.instanceOf(FSReadStream)
     
   describe 'read file system', ->    
     it 'should read all files', (done) ->
@@ -39,9 +46,11 @@ describe 'FSReadStream', ->
         'a.txt': 'text'
         'b.bin': new Buffer('binary')
 
-      stream = fs.createReadStream()
+      stream = fs.src('*')
 
       dumpStream stream, done, (files) ->
+        files.should.have.length(2)
+
         a = files[0]
         a.should.be.an.instanceOf File
         a.path.should.equal '/a.txt'
@@ -62,11 +71,14 @@ describe 'FSReadStream', ->
       it 'should read file', (done) ->
         fs = createFS fsData()
         
-        stream = fs.createReadStream()
+        stream = fs.src('**')
+
+        console.log stream.iterator
 
         dumpStream stream, done, (files) ->        
-          file = files[0]
-          
+          files.should.have.length(1)
+
+          file = files[0]          
           file.path.should.equal '/project/src/a.txt'
           file.base.should.equal '/project'
           file.cwd.should.equal '/project'
@@ -74,7 +86,19 @@ describe 'FSReadStream', ->
       it 'should set base', (done) ->
         fs = createFS fsData()
         
-        stream = fs.createReadStream('src')
+        stream = fs.src('**', cwd: 'src')
+
+        dumpStream stream, done, (files) ->        
+          file = files[0]
+          expect(file).to.exist
+          file.path.should.equal '/project/src/a.txt'
+          file.base.should.equal '/project/src'
+          file.cwd.should.equal '/project/src'
+
+      it 'should infer base', (done) ->
+        fs = createFS fsData()
+        
+        stream = fs.src('src/**')
 
         dumpStream stream, done, (files) ->        
           file = files[0]
@@ -82,7 +106,6 @@ describe 'FSReadStream', ->
           file.path.should.equal '/project/src/a.txt'
           file.base.should.equal '/project/src'
           file.cwd.should.equal '/project'
-
 
 
 

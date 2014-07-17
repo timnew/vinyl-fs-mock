@@ -2,24 +2,24 @@ pathUtil = require('path')
 File = require('vinyl')
 FileSystem = require('./FileSystem')
 Readable = require('readable-stream/readable')
+FileSystemIterator = require('./FileSystemIterator')
+_ = require('lodash')
 deprecate = require('util-deprecate')
 
 class FSReadStream extends Readable
-  constructor: (@fileSystem, @iterator, basepath) ->
+  constructor: (@fileSystem, @iterator, @defaults = {}) ->
     super
       objectMode: true
 
-    @basepath = if basepath?
-                  pathUtil.resolve(@fileSystem.fullpath(), basepath)
-                else
-                  @fileSystem.fullpath()
-
-  createFile: (path) ->
-    new File
-      path: path
-      base: @basepath
+    _.defaults @defaults, 
       cwd: @fileSystem.fullpath()
-      contents: @fileSystem.readFileAsBuffer(path)  
+      base: @fileSystem.fullpath()      
+
+    @defaults.cwd = @fileSystem.resolvePath(@defaults.cwd)
+    @defaults.base = @fileSystem.resolvePath(@defaults.base)
+    
+  createFile: (file) ->        
+    new File _.merge {}, @defaults, file , contents: @fileSystem.readFileAsBuffer(file.path)
     
   _read: ->
     path = @iterator.next()    
@@ -31,7 +31,14 @@ class FSReadStream extends Readable
     
 module.exports = FSReadStream
 
-createReadStream = (path = '.') ->
-  new FSReadStream(this, @createIterator(path, []), path)
+createReadStreamDeprecated = (path = '.') ->
+  iterator = new FileSystemIterator(this, [], cwd: path)
+  new FSReadStream(this, iterator, cwd: path)
 
-FileSystem.prototype.createReadStream = deprecate createReadStream, 'fileSystem.createReadStream is deprecated, use fileSystem.src instead.'
+FileSystem.prototype.createReadStream = deprecate createReadStreamDeprecated, 'fileSystem.createReadStream is deprecated, use fileSystem.src instead.'
+
+FileSystem.prototype.src = (patterns, options) ->
+  iterator = new FileSystemIterator this, patterns, options
+
+  new FSReadStream(this, iterator, options)
+
