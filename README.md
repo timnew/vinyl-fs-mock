@@ -16,13 +16,12 @@ Install using [npm][npm-url].
 ```coffeescript
 
 require('./spec_helper')
-spy = require('through2-spy')
 
 describe 'smoke test', ->
   createFS = require('../index')
   coffee = require('gulp-coffee')
   
-  it 'should replace gulp', (done) ->  
+  it 'should mock gulp', (done) ->  
     fs = createFS
           src:
             coffee:
@@ -38,15 +37,15 @@ describe 'smoke test', ->
                       fib(n) + fib(n-1)  
               """
         
-    fs.createReadStream 'src/coffee'
+    fs.src 'src/coffee/*.coffee'
       .pipe coffee
         bare: true
-      .pipe fs.createWriteStream('dest/js', true)
+      .pipe fs.dest 'dest/js'
       .onFinished done, (folder) ->
-        console.log fs.directory  # Display whole tree of files
+        # console.log fs.directory  # Display whole tree of files
         folder.should.equal fs.openFolder('dest/js')                
         folder['sample.js'].should.not.be.null
-        folder['another.js'].should.not.be.null      
+        folder['another.js'].should.not.be.null
       
 ```
 
