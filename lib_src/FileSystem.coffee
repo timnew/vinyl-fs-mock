@@ -110,7 +110,12 @@ class FileSystem
     content
 
   entryType: (path) ->        
-    switch Type.string(@readFile(path))
+    try 
+      content = @readFile(path)
+    catch ex
+      content = undefined if Type.is(ex, PathNotExistsException)      
+
+    switch Type.string(content)
       when 'Object'
         'folder'
       when 'Buffer'
@@ -119,14 +124,14 @@ class FileSystem
         'file.text'
       else
         'unknown'
-
+  
   isFolder: (path) ->
     @entryType(path) == 'folder'
 
   isFile: (path) ->
     type = @entryType(path)         
     type[..4] == 'file.'
-
+    
   subFileSystem: (path, create) ->
     path = @resolvePath(path)
     folder = @openFolder(path, create)

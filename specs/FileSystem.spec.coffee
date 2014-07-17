@@ -46,20 +46,30 @@ describe 'FileSystem', ->
 
       fs.fullpath().should.equal '/projects/project'
 
-    it 'should fetch entry type', ->
+    describe 'entry type', ->
+
       fs = createFS(fsData())
-
-      fs.entryType('/projects/project/a.txt').should.equal 'file.text'
-      fs.entryType('/projects/project/b.bin').should.equal 'file.binary'
-      fs.entryType('/projects/project/folder').should.equal 'folder'
       
-      fs.isFolder('/projects/project/folder').should.be.true
-      fs.isFolder('/projects/project/a.txt').should.be.false
-      fs.isFolder('/projects/project/b.bin').should.be.false
+      it 'should get entry type of path', ->      
+        fs.entryType('/projects/project/a.txt').should.equal 'file.text'
+        fs.entryType('/projects/project/b.bin').should.equal 'file.binary'
+        fs.entryType('/projects/project/folder').should.equal 'folder'
+        
+      it 'should check whether path is a folder', ->
+        fs.isFolder('/projects/project/folder').should.be.true
+        fs.isFolder('/projects/project/a.txt').should.be.false
+        fs.isFolder('/projects/project/b.bin').should.be.false
 
-      fs.isFile('/projects/project/a.txt').should.be.true
-      fs.isFile('/projects/project/b.bin').should.be.true
-      fs.isFile('/projects/project/folder').should.be.false
+      it 'should check whether path is a file', ->
+        fs.isFile('/projects/project/a.txt').should.be.true
+        fs.isFile('/projects/project/b.bin').should.be.true
+        fs.isFile('/projects/project/folder').should.be.false
+
+      it 'should not yield error when path not exist', ->        
+        fs.entryType('/not_exists')
+        fs.isFolder('/not_exists')
+        fs.isFile('/not_exists')
+        
 
   describe 'file operations', ->
     fsData = ->
