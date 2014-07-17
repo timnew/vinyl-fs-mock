@@ -41,8 +41,8 @@
     "yargs": "^1.2.6"
   },
   "dependencies": {
+    "glob2base": "git://github.com/timnew/glob2base.git#master",
     "lodash": "^2.4.1",
-    "lodash.bind": "^2.4.1",
     "minimatch": "^0.4.0",
     "readable-stream": "^1.0.27-1",
     "type-of-is": "^3.3.0",

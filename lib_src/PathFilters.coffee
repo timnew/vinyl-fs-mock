@@ -1,7 +1,8 @@
 pathUtil = require('path')
 Type = require('type-of-is')
-minimatch = require('minimatch')
-bind = require('lodash.bind')
+Minimatch = require('minimatch').Minimatch
+glob2base = require('glob2base')
+_ = require('lodash')
 
 log = (msg) ->
   log.log msg
@@ -14,13 +15,13 @@ log.enableLog = (enabled) ->
 
 log.enableLog(false)
 
-createFilterChain = (basepath, globs) ->
+createFilterChain = (globs, options) ->
   return passThrough if globs.length is 0
-
+  
   filter = terminator
 
-  for glob in globs.slice(0).reverse()
-    verifier = createVerifier(glob, basepath)
+  for glob in globs.slice(0).reverse()    
+    verifier = createVerifier(glob, options.cwd)
     chainer = checkFilterType(glob)
     filter = chainer verifier, filter
 
@@ -73,15 +74,23 @@ terminator = (input, result) ->
   log "terminator: #{result}"
   result      
 
-createVerifier = (glob, basepath) ->
+createVerifier = (glob, basepath) ->  
   verifier = switch Type.of(glob)
-              when RegExp     
-                _.bind glob.test, glob 
+              when RegExp  
+                (file) ->   
+                  glob.test file.path                
               when Function
                 glob
-              when String
+              when String                
                 glob = unrelativeGlob(glob, basepath)
-                minimatch.filter(glob, {matchBase: true})
+                minimatch = new Minimatch(glob, {matchBase: true})
+                base = pathUtil.resolve(glob2base.minimatch(minimatch.set))
+                (file) ->
+                  if minimatch.match file.path
+                    file.base = base
+                    true
+                  else
+                    false
   
   verifier.verifierName = glob
   verifier 
