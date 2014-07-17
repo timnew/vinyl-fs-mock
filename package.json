@@ -1,6 +1,6 @@
 {
   "name": "vinyl-fs-mock",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A fake file system implementation, used for test code written based on vinyl and vinyl-fs. Including gulp plugins",
   "main": "index.js",
   "scripts": {
