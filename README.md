@@ -37,10 +37,10 @@ describe 'smoke test', ->
                       fib(n) + fib(n-1)  
               """
         
-    fs.src 'src/coffee/*.coffee'
+    fs.src 'src/coffee/*.coffee' # work as same as gulp.src
       .pipe coffee
         bare: true
-      .pipe fs.dest 'dest/js'
+      .pipe fs.dest 'dest/js'    # work as same as gulp.dest
       .onFinished done, (folder) ->
         # console.log fs.directory  # Display whole tree of files
         folder.should.equal fs.openFolder('dest/js')                
