@@ -26,8 +26,7 @@ gulp.task 'clean', ->
   del.sync(paths.dest.coffee)
 
 gulp.task 'coffee', ->
-  gulp.src paths.source.coffee
-    .pipe plumber()
+  gulp.src paths.source.coffee    
     .pipe coffee()
     .pipe gulp.dest paths.dest.coffee
 
