@@ -48,6 +48,6 @@
     "readable-stream": "^1.0.27-1",
     "type-of-is": "^3.3.0",
     "util-deprecate": "^1.0.0",
-    "vinyl": "^0.2.3"
+    "vinyl": "^1.1.0"
   }
 }
