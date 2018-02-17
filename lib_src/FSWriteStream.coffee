@@ -2,6 +2,7 @@ pathUtil = require('path')
 FileSystem = require('./FileSystem')
 Writable = require('readable-stream/writable')
 deprecate = require('util-deprecate')
+{ isBinarySync } = require('istextorbinary')
 
 class FSWriteStream extends Writable
   constructor: (@fileSystem, folder, cwd) ->
@@ -29,6 +30,7 @@ class FSWriteStream extends Writable
     pathUtil.join @path, relativePath
 
   dumpFile: (file) ->
+    return file.contents.toString('hex') if file.isBuffer() and isBinarySync file.basename, file.contents
     return file.contents.toString('utf8') if file.isBuffer()
     return '' if file.isNull()
     throw new Error('Not Supported')
