@@ -1,4 +1,4 @@
-require('coffee-script/register')
+require('coffeescript/register')
 
 gulp = require('gulp')
 del = require('del')
@@ -33,7 +33,7 @@ gulp.task 'coffee', ->
 gulp.task 'mocha', ['coffee'], ->
   gulp.src paths.source.spec[0], paths.source.spec[1]
     .pipe plumber()
-    .pipe mocha({reporter: 'spec', growl: true})    
+    .pipe mocha({require: 'coffeescript/register', reporter: 'spec', growl: true})    
 
 gulp.task 'build', ['clean', 'coffee', 'mocha']
 
