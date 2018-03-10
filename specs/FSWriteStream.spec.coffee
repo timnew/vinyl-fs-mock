@@ -89,6 +89,17 @@ describe 'FSWriteStream', ->
         
         fs.isFolder('x/y/z').should.be.true
 
+      it 'should create new file in hex encoding if it is binary', ->
+        fs = createFS fsData()
+
+        stream = fs.createWriteStream()
+
+        hexString = Buffer.from [100, 200, 300]
+
+        stream.write createFile('/project/src/binary.jpg', hexString)
+
+        fs.readFile('/project/src/binary.jpg').should.equal hexString.toString 'hex'
+
     describe 'relative path', ->
 
       it 'should override path', ->
