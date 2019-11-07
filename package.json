@@ -45,7 +45,7 @@
     "glob2base": "git+https://github.com/timnew/glob2base.git#master",
     "istextorbinary": "^2.2.1",
     "lodash": "^2.4.1",
-    "minimatch": "^0.4.0",
+    "minimatch": "^3.0.2",
     "readable-stream": "^1.0.27-1",
     "type-of-is": "^3.3.0",
     "util-deprecate": "^1.0.0",
